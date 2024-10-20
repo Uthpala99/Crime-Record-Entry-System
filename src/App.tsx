@@ -15,7 +15,7 @@ function App() {
         </div>
         <div className="p-4 grow">
           <div className="flex flex-col h-full gap-2">
-            <span className="text-3xl">
+            <span className="text-2xl font-bold">
               අපරාධයේ සවිස්තර තොරතුරු වාර්තා කිරීම
             </span>
             <div className="grow">

@@ -1,42 +1,51 @@
 import React, { useState } from "react";
 import { BaseBox } from "../../components/BaseBox";
-import { Divider, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { Divider, SelectChangeEvent } from "@mui/material";
 import { Button, SelectInput } from "../../components";
+import { useNavigate } from "react-router-dom";
 
 export function Step1() {
+  const navigate = useNavigate();
   const [typeOfChildAbuse, setTypeOfChildAbuse] = useState("");
-  const [subTypeOfChildAbuse, setSubTypeOfChildAbuse] = useState("බාල අපරාධය");
+  const [subTypeOfChildAbuse, setSubTypeOfChildAbuse] = useState("");
+
   const handleChildAbuseSelectChange = (event: SelectChangeEvent) => {
     setTypeOfChildAbuse(event.target.value);
   };
   const handleChildAbuseSubTypeSelectChange = (event: SelectChangeEvent) => {
     setSubTypeOfChildAbuse(event.target.value);
   };
+
+  const handleMainStepNext = () => {
+    navigate('/step2');
+  };
+
+
   return (
     <BaseBox>
-      <div className="p-4 flex flex-col grow">
-        <span className="text-xl ">1. බාල අපරාධය සහ බාල අපරාධ වර්ගය</span>
+      <div className="p-5 flex flex-col grow">
+        <span className="text-xl font-bold">1. බාල අපරාධය සහ බාල අපරාධ වර්ගය</span>
         <div className="flex gap-2 justify-between rounded-md grow">
-          <div className="p-5 grow flex flex-col justify-between">
+          <div className="p-2 grow flex flex-col justify-between">
             <div>
-              <div className="my-6">
-                <span>වාර්තා වූ බාල අපරාධය</span>
-                <SelectInput
-                  value={typeOfChildAbuse}
-                  onChange={handleChildAbuseSelectChange}
-                  items={["බාල අපරාධය"]}
-                />
-              </div>
-              <div className="my-6">
-                <span>බාල අපරාධයට අදාල වූ අනූ අපරාධ වර්ගය</span>
-                <SelectInput
-                  value={subTypeOfChildAbuse}
-                  onChange={handleChildAbuseSubTypeSelectChange}
-                  items={["අනූ අපරාධ වර්ගය"]}
-                />
-              </div>
+                <div className="mt-6 mb-3">
+                  <span className="font-semibold">වාර්තා වූ බාල අපරාධය</span>
+                  <SelectInput
+                    value={typeOfChildAbuse}
+                    onChange={handleChildAbuseSelectChange}
+                    items={["බාල අපරාධය"]}
+                  />
+                </div>
+                <div className="my-3">
+                  <span className="font-semibold">බාල අපරාධයට අදාල වූ අනූ අපරාධ වර්ගය</span>
+                  <SelectInput
+                    value={subTypeOfChildAbuse}
+                    onChange={handleChildAbuseSubTypeSelectChange}
+                    items={["අනූ අපරාධ වරගය"]}
+                  />
+                </div>
             </div>
-            <div className=" flex gap-2">
+            <div className="flex gap-2">
               <Button
                 variant="outlined"
                 buttonColor="error"
@@ -46,6 +55,7 @@ export function Step1() {
                 variant="contained"
                 buttonColor="primary"
                 text="ඊළඟ පියවරට"
+                onClick={handleMainStepNext}
               />
             </div>
           </div>
