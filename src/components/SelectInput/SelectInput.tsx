@@ -9,7 +9,7 @@ export function SelectInput({ value, onChange, items }: SelectInputProps) {
   return (
     <div>
       <Select
-        className="w-[330px] block my-2"
+        className="w-[330px] block my-3"
         value={value}
         onChange={onChange}
         displayEmpty

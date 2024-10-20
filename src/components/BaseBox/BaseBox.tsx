@@ -6,7 +6,7 @@ interface BaseBoxProps {
 
 export function BaseBox({ children }: BaseBoxProps) {
   return (
-    <div className="shadow shadow-md rounded-lg flex flex-col min-h-full">
+    <div className="shadow shadow-md rounded-lg flex flex-col min-h-full mt-3">
       {children}
     </div>
   );

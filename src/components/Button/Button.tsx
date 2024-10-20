@@ -11,6 +11,7 @@ interface ButtonProps {
   disabled?: boolean;
   size?: ButtonSize;
   buttonColor?: ButtonColor;
+  onClick?: () => void;
 }
 function Button({
   startIcon,
@@ -20,6 +21,7 @@ function Button({
   disabled = false,
   size = "medium",
   buttonColor = "primary",
+  onClick,
 }: ButtonProps) {
   return (
     <div>
@@ -31,6 +33,7 @@ function Button({
         size={size}
         disabled={disabled}
         color={buttonColor}
+        onClick={onClick}
       >
         {text}
       </MUIButton>
