@@ -47,7 +47,7 @@ const steps = [
   },
 ];
 
-export function VerticalStepper() {
+export function VerticalStepper({ currentStep }: { currentStep: number }) {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => {
@@ -61,31 +61,13 @@ export function VerticalStepper() {
   const handleReset = () => {
     setActiveStep(0);
   };
-
+  console.log(currentStep);
   return (
     <Box sx={{ maxWidth: 400 }}>
-      <Stepper activeStep={activeStep} orientation="vertical">
+      <Stepper activeStep={currentStep} orientation="vertical">
         {steps.map((step, index) => (
           <Step key={step.label}>
             <StepLabel>{step.label}</StepLabel>
-            <StepContent>
-              <Box sx={{ mb: 2 }}>
-                <Button
-                  variant="contained"
-                  onClick={handleNext}
-                  sx={{ mt: 1, mr: 1 }}
-                >
-                  {index === steps.length - 1 ? "Finish" : "Continue"}
-                </Button>
-                <Button
-                  disabled={index === 0}
-                  onClick={handleBack}
-                  sx={{ mt: 1, mr: 1 }}
-                >
-                  Back
-                </Button>
-              </Box>
-            </StepContent>
           </Step>
         ))}
       </Stepper>
