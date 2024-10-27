@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 export function Step1() {
   const { updateFormData, formData } = useFormContext();
   const navigate = useNavigate();
-  const [showPreview, setShowPreview] = useState(false);
+  // const [showPreview, setShowPreview] = useState(false);
   const [typeOfChildAbuse, setTypeOfChildAbuse] = useState("");
   const [subTypeOfChildAbuse, setSubTypeOfChildAbuse] = useState("");
 
@@ -71,9 +71,9 @@ export function Step1() {
     });
   };
   
-  const handleShowPreview = () => {
-    setShowPreview(true);
-  };
+  // const handleShowPreview = () => {
+  //   setShowPreview(true);
+  // };
 
   const handleReset = () => {
     setTypeOfChildAbuse("");
@@ -84,7 +84,13 @@ export function Step1() {
     <BaseBox>
       <div className="p-5 flex flex-col grow">
         <ToastContainer />
-        <span className="text-xl font-bold"> 1. බාල අපරාධය සහ බාල අපරාධ වර්ගය</span>
+        <div className="flex justify-between">
+          <span className="text-xl font-bold"> 1. බාල අපරාධය සහ බාල අපරාධ වර්ගය</span>
+          <div className="place-items-center ">
+            <Button variant="outlined" text="තාවකලිකව සුරකින්න" onClick={handleSave} />
+          </div>
+        </div>
+      
         <div className="flex gap-2 justify-between rounded-md grow">
           <div className="p-2 grow flex flex-col justify-between">
             <div>
@@ -124,16 +130,16 @@ export function Step1() {
                   text="ඊළඟ පියවරට"
                   onClick={handleNext}
                 />
-                <Button
+                {/* <Button
                   variant="outlined"
                   buttonColor="primary"
                   text="තහවුරු කර ගැනීමට "
                   onClick={handleShowPreview}
-                />
+                /> */}
               </div>
             </div>
           </div>
-          <Divider className="h-full" orientation="vertical" flexItem />
+          {/* <Divider className="h-full" orientation="vertical" flexItem />
           <div className="w-[500px] p-5">
             {showPreview && (
               <div>
@@ -142,7 +148,7 @@ export function Step1() {
                 <p><strong>බාල අපරාධයට අදාල වූ අනූ අපරාධ වර්ගය:</strong> {subTypeOfChildAbuse}</p>
               </div>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </BaseBox>

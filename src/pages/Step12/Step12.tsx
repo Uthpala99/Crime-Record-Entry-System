@@ -101,11 +101,23 @@ export function Step12() {
       });
   };
 
+  const handleReset = () => {
+  };
+
   return (
     <BaseBox>
       <div className="p-4 flex flex-col grow">
         <ToastContainer />
+        <div className="flex justify-between">
         <span className="text-xl font-bold">12. අධිකරණ ක්‍රියාමාර්ග</span>
+          <div className="place-items-center ">
+            <Button
+              variant="outlined"
+              text="තාවකලිකව සුරකින්න"
+              onClick={handleSave}
+            />
+          </div>
+        </div>
         <div className="flex gap-2 justify-between rounded-md grow">
           <div className="p-5 grow flex flex-col justify-between">
             <Box sx={{ width: "100%" }}>
@@ -440,6 +452,7 @@ export function Step12() {
                   variant="contained"
                   buttonColor="error"
                   text="යළි සැකසුමට"
+                  onClick={handleReset}
                 />
 
                 <Button

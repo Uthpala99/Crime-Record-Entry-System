@@ -90,11 +90,6 @@ export function VerticalStepper({
           ))}
         </Stepper>
       </Box>
-      <br />
-        <br />
-      <div className="place-items-center ">
-          <Button text="තාවකලිකව සුරකින්න" onClick={handleSave} />
-        </div>
     </div>
   );
 }

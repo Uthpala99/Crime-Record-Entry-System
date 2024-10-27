@@ -114,11 +114,23 @@ export function Step3() {
       });
   };
 
+  const handleReset = () => {
+  };
+
   return (
     <BaseBox>
       <ToastContainer />
       <div className="p-5 flex flex-col grow">
+      <div className="flex justify-between">
         <span className="text-xl font-bold">3. බාල අපරාධය සහ බාල අපරාධ {"වර්"}{"ගය"} </span>
+          <div className="place-items-center ">
+            <Button
+              variant="outlined"
+              text="තාවකලිකව සුරකින්න"
+              onClick={handleSave}
+            />
+          </div>
+        </div>
         <div className="flex gap-2 justify-between rounded-md grow mt-5">
           <div className="p-2 grow flex flex-col justify-between">
             <div>
@@ -219,7 +231,7 @@ export function Step3() {
                   variant='contained'
                   buttonColor="error"
                   text="යළි සැකසුමට"
-                  onClick={handleSave}
+                  onClick={handleReset}
                 />
                 <Button
                   variant="outlined"
@@ -231,8 +243,8 @@ export function Step3() {
               </div>
             </div>
           </div>
-          <Divider className="h-full" orientation="vertical" flexItem />
-          <div className="w-[500px] p-5">Values go here</div>
+          {/* <Divider className="h-full" orientation="vertical" flexItem />
+          <div className="w-[500px] p-5">Values go here</div> */}
         </div>
       </div>
     </BaseBox>

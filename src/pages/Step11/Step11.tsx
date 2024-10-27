@@ -86,9 +86,14 @@ export function Step11() {
     <BaseBox>
       <div className="p-5 flex flex-col grow">
         <ToastContainer />
+        <div className="flex justify-between">
         <span className="text-xl font-bold">
           11. පොලිස් විමර්ශන සහ ක්‍රියාමාර්ග
         </span>
+        <div className="place-items-center ">
+          <Button variant="outlined" text="තාවකලිකව සුරකින්න" onClick={handleSave} />
+        </div>
+        </div>
         <div className="flex gap-2 justify-between rounded-md grow mt-5">
           <div className="p-2 grow flex flex-col justify-between">
             <Box sx={{ width: "100%" }}>
@@ -604,8 +609,8 @@ export function Step11() {
               </div>
             </div>
           </div>
-          <Divider className="h-full " orientation="vertical" flexItem />
-          <div className="w-[500px] p-5">Values go here</div>
+          {/* <Divider className="h-full " orientation="vertical" flexItem />
+          <div className="w-[500px] p-5">Values go here</div> */}
         </div>
       </div>
     </BaseBox>

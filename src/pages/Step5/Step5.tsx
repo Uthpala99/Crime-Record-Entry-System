@@ -133,7 +133,8 @@ export function Step5() {
     setOtherInfoStep503(event.target.value);
   };
 
-    
+  const handleReset = () => {
+  };
 
     const handleSave = async () => {
       const httpService = new HTTPService({ baseURL: "http://localhost:3001" });
@@ -168,7 +169,16 @@ export function Step5() {
     <BaseBox>
       <div className="p-5 flex flex-col grow">
         <ToastContainer/>
-        <span className="text-xl font-bold">5. අපරාධය සඳහා භාවිත ක්‍රම විධි</span>
+        <div className="flex justify-between">
+          <span className="text-xl font-bold">5. අපරාධය සඳහා භාවිත ක්‍රම විධි</span>
+          <div className="place-items-center ">
+            <Button
+              variant="outlined"
+              text="තාවකලිකව සුරකින්න"
+              onClick={handleSave}
+            />
+          </div>
+        </div>        
         <div className="flex gap-2 justify-between rounded-md grow mt-5">
           <div className="p-2 grow flex flex-col justify-between">
           <Box sx={{ width: '100%'}} >
@@ -334,7 +344,7 @@ export function Step5() {
                   variant='contained'
                   buttonColor="error"
                   text="යළි සැකසුමට"
-                  onClick={handleSave}
+                  onClick={handleReset}
                 />
                 <Button
                   variant="outlined"
@@ -346,8 +356,8 @@ export function Step5() {
               </div>
             </div>
           </div>
-          <Divider className="h-full" orientation="vertical" flexItem />
-          <div className="w-[500px] p-5">Values go here</div>
+          {/* <Divider className="h-full" orientation="vertical" flexItem />
+          <div className="w-[500px] p-5">Values go here</div> */}
         </div>
       </div>
     </BaseBox>
