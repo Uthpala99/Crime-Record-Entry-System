@@ -10,57 +10,51 @@ import { HTTPService } from "../../services";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export function Step4() {
+export function Step10() {
   const navigate = useNavigate();
   const { updateFormData, formData } = useFormContext();
-  const [typeOfCrimeScene, setTypeOfCrimeScene] = useState("");
-  const [crimeScene, setCrimeScene] = useState("");
-  const [otherInfoStep4, setOtherInfoStep4] = useState("");
+
+  const [contributingFactorToCrime, setContributingFactorToCrime] = useState("");
+  const [otherInfoStep10, setOtherInfoStep10] = useState("");
 
   
-  const handleTypeOfCrimeSceneSelectChange = (event: SelectChangeEvent) => {
-    setTypeOfCrimeScene(event.target.value);
+  const handleContributingFactorToCrimeSelectChange = (event: SelectChangeEvent) => {
+    setContributingFactorToCrime(event.target.value);
   };
 
-  const handleCrimeSceneTextChange = (event:  React.ChangeEvent<HTMLInputElement>) => {
-    setCrimeScene(event.target.value);
+  const handleOtherInfoStep10TextChange = (event:  React.ChangeEvent<HTMLInputElement>) => {
+    setOtherInfoStep10(event.target.value);
   };
 
-  const handleOtherInfoStep4TextChange = (event:  React.ChangeEvent<HTMLInputElement>) => {
-    setOtherInfoStep4(event.target.value);
-  };
-
-  const handleNext = () => {
-    if (!typeOfCrimeScene || !crimeScene || !otherInfoStep4) {
+  const handleMainStepNext = () => {
+    if (!contributingFactorToCrime || !otherInfoStep10) {
       return toast.warning("කරුණාකර සියලු අනුමත දත්ත පුරවන්න.", {
           className: "toast-failed",
           bodyClassName: "toast-failed",
       });
-    }  
-    updateFormData("form4", {
-      typeOfCrimeScene,
-      crimeScene,
-      otherInfoStep4
+    }
+    updateFormData("form10", {
+      contributingFactorToCrime,
+      otherInfoStep10
     });
-    updateFormData("currentStep", 4);
-    navigate("/step5");
+    updateFormData("currentStep", 10);
+    navigate('/step11');
   };
-  const handleBack = () => {
-    updateFormData("form4", {
-      typeOfCrimeScene,
-      crimeScene,
-      otherInfoStep4
+
+  const handleMainStepBack = () => {
+    updateFormData("form10", {
+      contributingFactorToCrime,
+      otherInfoStep10
     });
-    updateFormData("currentStep", 2);
-    navigate("/step3");
+    updateFormData("currentStep", 8);
+    navigate('/step9');
   };
 
   const handleSave = async () => {
     const httpService = new HTTPService({ baseURL: "http://localhost:3001" });
-    const newFormData={...formData,form4:{ 
-      typeOfCrimeScene,
-      crimeScene,
-      otherInfoStep4 
+    const newFormData={...formData,form10:{ 
+      contributingFactorToCrime,
+      otherInfoStep10
     }};
     httpService.post("/submit-form",  {newFormData} ).then((result)=>{
       toast.success((result.data as { msg: string; success: boolean }).msg, {
@@ -76,40 +70,30 @@ export function Step4() {
     }).catch((error)=>{
       console.error(error);
     });
-    
   };
 
   return (
     <BaseBox>
-      <div className="p-5 flex flex-col grow">
-      <ToastContainer />
-        <span className="text-xl font-bold">4. අපරාධ ස්ථානයේ ස්වරූපය</span>
+      <div className="p-4 flex flex-col grow">
+        <ToastContainer/>
+        <span className="text-xl font-bold">10. අපරාධ සඳහා ඉවහල් වූ හේතු සාධක</span>
         <div className="flex gap-2 justify-between rounded-md grow">
-          <div className="p-2 grow flex flex-col justify-between">
+          <div className="p-5 grow flex flex-col justify-between">
             <div>
-                <div className="mt-6 mb-3">
-                  <span className="font-semibold">අපරාධ ස්ථාන වරගීකරණය</span>
+                <div className="my-6">
+                  <span>අපරාධයට ඉවහල්වූ හේතු සාධකය</span>
                   <SelectInput
                     className="w-[330px] block my-3"
-                    value={typeOfCrimeScene}
-                    onChange={handleTypeOfCrimeSceneSelectChange}
-                    items={["ස්ථාන වරගීකරණය"]}
+                    value={contributingFactorToCrime}
+                    onChange={handleContributingFactorToCrimeSelectChange}
+                    items={["හේතු සාධකය"]}
                   />
-                </div>
-                <div className="my-3">
-                  <span className="font-semibold">අපරාධ ස්ථානය</span>
-                  <TextInput
-                    value={crimeScene}
-                    onChange={handleCrimeSceneTextChange}
-                    placeholder="අපරාධ ස්ථානය"
-                  />
-                </div>
-              
+                </div>    
                 <div className="my-6">
-                  <span className="font-semibold">වෙනත් තොරතුරු</span>
+                  <span>වෙනත් තොරතුරු</span>
                   <TextInput
-                    value={otherInfoStep4}
-                    onChange={handleOtherInfoStep4TextChange}
+                    value={otherInfoStep10}
+                    onChange={handleOtherInfoStep10TextChange}
                     placeholder="වෙනත් තොරතුරු"
                     fullWidth={true}
                   />
@@ -122,7 +106,7 @@ export function Step4() {
                   startIcon={<ArrowBackIcon />}
                   buttonColor="primary"
                   text="පෙර පියවරට"
-                  onClick={handleBack}
+                  onClick={handleMainStepBack}
                   />
                 <Button
                   variant='contained'
@@ -135,7 +119,7 @@ export function Step4() {
                   endIcon={<ArrowForwardIcon/>}
                   buttonColor="primary"
                   text="ඊළඟ පියවරට"
-                  onClick={handleNext}
+                  onClick={handleMainStepNext}
                 />
               </div>
             </div>

@@ -5,9 +5,14 @@ import { Button, TextInput } from "../../components";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
+import { useFormContext } from "../../hooks/formHook";
+import { HTTPService } from "../../services";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function Step3() {
   const navigate = useNavigate();
+  const { updateFormData, formData } = useFormContext();
   const [selectedOption, setSelectedOption] = useState<string>("1");
   const [crimeDate, setCrimeDate] = useState("");
   const [crimeTime, setCrimeTime] = useState("");
@@ -44,16 +49,74 @@ export function Step3() {
     setCrimeEndedTime(event.target.value);
   };
 
-  const handleMainStepBack = () => {
-    navigate('/step2');
+  const handleNext = () => {
+    if (selectedOption === "1" ){
+      if (!crimeDate || !crimeTime ) {
+        return toast.warning("කරුණාකර සියලු අනුමත දත්ත පුරවන්න.", {
+            className: "toast-failed",
+            bodyClassName: "toast-failed",
+        });
+      }
+    }else if (selectedOption === "2" ){
+      if (!crimeStartedDate || !crimeEndedDate || !crimeStartedTime || !crimeEndedTime ) {
+        return toast.warning("කරුණාකර සියලු අනුමත දත්ත පුරවන්න.", {
+            className: "toast-failed",
+            bodyClassName: "toast-failed",
+        });
+      }
+    }
+    updateFormData("form3", {
+      crimeDate,
+      crimeTime,
+      crimeStartedDate,
+      crimeEndedDate,
+      crimeStartedTime,
+      crimeEndedTime
+    });
+    updateFormData("currentStep", 3);
+    navigate("/step4");
+  };
+  const handleBack = () => {
+    updateFormData("form2", {
+      crimeDate,
+      crimeTime,
+      crimeStartedDate,
+      crimeEndedDate,
+      crimeStartedTime,
+      crimeEndedTime
+    });
+    updateFormData("currentStep", 1);
+    navigate("/step2");
   };
 
-  const handleMainStepNext = () => {
-    navigate('/step4');
+  const handleSave = async () => {
+    const httpService = new HTTPService({ baseURL: "http://localhost:3001" });
+    const newFormData={...formData,form3:{ crimeDate,
+      crimeTime,
+      crimeStartedDate,
+      crimeEndedDate,
+      crimeStartedTime,
+      crimeEndedTime }};
+
+      httpService.post("/submit-form",  {newFormData} ).then((result)=>{
+        toast.success((result.data as { msg: string; success: boolean }).msg, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        console.log(result)
+      }).catch((error)=>{
+        console.error(error);
+      });
   };
 
   return (
     <BaseBox>
+      <ToastContainer />
       <div className="p-5 flex flex-col grow">
         <span className="text-xl font-bold">3. බාල අපරාධය සහ බාල අපරාධ {"වර්"}{"ගය"} </span>
         <div className="flex gap-2 justify-between rounded-md grow mt-5">
@@ -144,25 +207,26 @@ export function Step3() {
             </div>
 
             <div className="flex gap-2">
-              <div className="flex gap-2 justify-between rounded-md grow">
+              <div className="flex gap-2 place-content-evenly rounded-md grow">
                 <Button
                   variant="outlined"
                   startIcon={<ArrowBackIcon />}
                   buttonColor="primary"
                   text="පෙර පියවරට"
-                  onClick={handleMainStepBack}
+                  onClick={handleBack}
                   />
                 <Button
                   variant='contained'
                   buttonColor="error"
                   text="යළි සැකසුමට"
+                  onClick={handleSave}
                 />
                 <Button
                   variant="outlined"
                   endIcon={<ArrowForwardIcon/>}
                   buttonColor="primary"
                   text="ඊළඟ පියවරට"
-                  onClick={handleMainStepNext}
+                  onClick={handleNext}
                 />
               </div>
             </div>

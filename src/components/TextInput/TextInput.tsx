@@ -1,6 +1,6 @@
 import React from "react";
 import { TextField } from "@mui/material";
-
+//type SelectWidth = "w-[330px] block my-3" | "w-[250px] block my-3" | "w-[100px] block my-3" ;
 interface TextInputProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -8,6 +8,7 @@ interface TextInputProps {
   placeholder?: string;
   type?: string;
   fullWidth?: boolean;
+  className?:string;
 }
 
 export function TextInput({
@@ -16,13 +17,14 @@ export function TextInput({
   placeholder = "", 
   type = "text", 
   fullWidth = false, 
+  className = "w-[330px]",
 }: TextInputProps) {
   
   return (
     <div>
       <div className="my-3">
         <TextField
-          className="w-[330px]"
+          className={className}
           value={value}
           onChange={onChange}
           placeholder={placeholder}

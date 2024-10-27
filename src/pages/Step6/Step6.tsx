@@ -5,10 +5,15 @@ import { Button, SelectInput, TextInput } from "../../components";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import { useFormContext } from "../../hooks/formHook";
+import { HTTPService } from "../../services";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 export function Step6() {
   const navigate = useNavigate();
+  const { updateFormData, formData } = useFormContext();
   const stepCount = 2;
 
   const [activeStep, setActiveStep] = useState(0);
@@ -22,6 +27,14 @@ export function Step6() {
   
 
   const handleNext = () => {
+    if (activeStep === 0 ){
+      if (!victimName || !damageDone || !otherInfoStep601  ) {
+        return toast.warning("කරුණාකර සියලු අනුමත දත්ත පුරවන්න.", {
+            className: "toast-failed",
+            bodyClassName: "toast-failed",
+        });
+      }
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -29,7 +42,39 @@ export function Step6() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const handleMainStepNext = () => {
+    if (activeStep === 1 ){
+      if ( !propertyType || !propertySubType || !propertyValue ||  !otherInfoStep602 ) {
+        return toast.warning("කරුණාකර සියලු අනුමත දත්ත පුරවන්න.", {
+            className: "toast-failed",
+            bodyClassName: "toast-failed",
+        });
+      }
+    }
+    updateFormData("form6", {
+      victimName,
+      damageDone,
+      otherInfoStep601,
+      propertyType,
+      propertySubType,
+      propertyValue,
+      otherInfoStep602
+    });
+    updateFormData("currentStep", 6);
+    navigate('/step7');
+  };
+
   const handleMainStepBack = () => {
+    updateFormData("form6", {
+      victimName,
+      damageDone,
+      otherInfoStep601,
+      propertyType,
+      propertySubType,
+      propertyValue,
+      otherInfoStep602
+    });
+    updateFormData("currentStep", 4);
     navigate('/step5');
   };
 
@@ -61,22 +106,37 @@ export function Step6() {
     setOtherInfoStep602(event.target.value);
   };
 
-  const handleSubmit = async () => {
-    try {
-      // const response = await axios.post('http://localhost:3001/submit-form', formData);
-      // if (response.data.success) {
-      //   console.log('Form submitted successfully', response.data.data);
-      // } else {
-      //   console.error('Form submission failed');
-      // }
-    } catch (error) {
-      console.error('Error submitting form', error);
-    }
+  const handleSave = async () => {
+    const httpService = new HTTPService({ baseURL: "http://localhost:3001" });
+    const newFormData={...formData,form6:{ 
+      victimName,
+      damageDone,
+      otherInfoStep601,
+      propertyType,
+      propertySubType,
+      propertyValue,
+      otherInfoStep602 }};
+      
+      httpService.post("/submit-form",  {newFormData} ).then((result)=>{
+        toast.success((result.data as { msg: string; success: boolean }).msg, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        console.log(result)
+      }).catch((error)=>{
+        console.error(error);
+      });
   };
 
   return (
     <BaseBox>
       <div className="p-5 flex flex-col grow">
+        <ToastContainer />
         <span className="text-xl font-bold">6. අපරාධ ගොදුරු පුද්ගල ශාරීරික හානි වර්ග හා දේපළ හානි වර්ග හා වටිනාකම්</span>
         <div className="flex gap-2 justify-between rounded-md grow mt-5">
           <div className="p-2 grow flex flex-col justify-between">
@@ -101,7 +161,7 @@ export function Step6() {
               <div>
                 <React.Fragment>
                   <Typography sx={{ mt: 2, mb: 1 }}>
-                    {activeStep == 0 && (
+                    {activeStep === 0 && (
                       <div>
                           <span className="text-xl font-bold mt-2">අපරාධය ගොදුරු පුද්ගල ශාරීරික හානි</span>
                           <div className="mx-3" >
@@ -111,11 +171,13 @@ export function Step6() {
                                   value={victimName}
                                   onChange={handleVictimNameTextChange}
                                   type="text"
+                                  placeholder="වින්දිතයාගේ නම"
                                 />
                               </div>
                               <div className="mt-6 mb-3">
                                 <span className="font-semibold">සිදුවූ හානිය</span>
                                 <SelectInput
+                                  className="w-[330px] block my-3"
                                   value={damageDone}
                                   onChange={handleDamageDoneSelectChange}
                                   items={["සිදුවූ හානිය"]}
@@ -136,7 +198,7 @@ export function Step6() {
                       </div>
                     )}
 
-                    {activeStep == 1 && (
+                    {activeStep === 1 && (
                       <div>
                           <span className="text-xl font-bold mt-2">අපරාධය නිසා සිදුවූ දේපළ හානි වර්ග</span>
                           <div className="mx-3">
@@ -144,6 +206,7 @@ export function Step6() {
                               <div className="mt-6">
                                 <span className="font-semibold">දේපළ වර්ගය</span>
                                 <SelectInput
+                                  className="w-[330px] block my-3"
                                   value={propertyType}
                                   onChange={handlePropertyTypeSelectChange}
                                   items={["දේපළ වර්ගය"]}
@@ -152,6 +215,7 @@ export function Step6() {
                               <div className="mt-6">
                                 <span className="font-semibold">දේපළ අනු වර්ගය</span>
                                 <SelectInput
+                                  className="w-[330px] block my-3"
                                   value={propertySubType}
                                   onChange={handlePropertySubTypeSelectChange}
                                   items={["දේපළ අනු වර්ගය"]}
@@ -164,6 +228,7 @@ export function Step6() {
                                   value={propertyValue}
                                   onChange={handlePropertyValueTextChange}
                                   type="text"
+                                  placeholder="දේපළ වටිනාකම"
                                 />
                             </div>
                             <div className="my-6">
@@ -172,6 +237,7 @@ export function Step6() {
                                   value={otherInfoStep602}
                                   onChange={handleOtherInfoStep602TextChange}
                                   type="text"
+                                  placeholder="වෙනත් තොරතුරු"
                                   fullWidth={true}
                                 />
                             </div>
@@ -184,7 +250,7 @@ export function Step6() {
             </Box>
 
             <div className="flex gap-2">
-              <div className="flex gap-2 justify-between rounded-md grow">
+              <div className="flex gap-2 place-content-evenly rounded-md grow">
                 <Button
                   variant="outlined"
                   startIcon={<ArrowBackIcon />}
@@ -196,13 +262,14 @@ export function Step6() {
                   variant='contained'
                   buttonColor="error"
                   text="යළි සැකසුමට"
+                  onClick={handleSave}
                 />
                 <Button
                   variant="outlined"
                   endIcon={<ArrowForwardIcon/>}
                   buttonColor="primary"
-                  text= {activeStep === 1 ? "Submit" : "ඊළඟ පියවරට"}
-                  onClick={activeStep === 1 ? handleSubmit : handleNext}
+                  text="ඊළඟ පියවරට"
+                  onClick={activeStep === 1 ? handleMainStepNext : handleNext}
                 />
               </div>
             </div>

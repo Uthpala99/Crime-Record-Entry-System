@@ -35,12 +35,14 @@ export const useFormContext = () => {
 const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [formData, setFormData] = useState<FormData>({});
 
-  const updateFormData = (formKey: string, data: any) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [formKey]: data,
-    }));
+  const updateFormData = (formKey: string, data: any, callback?: () => void) => {
+    setFormData((prevData) => {
+      const newData = { ...prevData, [formKey]: data };
+      if (callback) callback();
+      return newData;
+    });
   };
+  
 
   return (
     <FormContext.Provider value={{ formData, updateFormData }}>

@@ -6,13 +6,18 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { useFormContext } from "../../hooks/formHook";
+import { HTTPService } from "../../services";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function Step2() {
   const navigate = useNavigate();
-  const { updateFormData } = useFormContext();
+  const { updateFormData, formData } = useFormContext();
   const [GNDivision, setGNDivision] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
+  const [division, setDivision] = useState("");
+  const [policeStation, setPoliceStation] = useState("");
   const [crimeLocationAddr, setCrimeLocationAddr] = useState("");
 
   const handleGNDivisionSelectChange = (event: SelectChangeEvent) => {
@@ -31,40 +36,84 @@ export function Step2() {
     setLongitude(event.target.value);
   };
 
+  const handleDivisionSelectChange = (event: SelectChangeEvent) => {
+    setDivision(event.target.value);
+  };
+
+  const handlePoliceStationSelectChange = (event: SelectChangeEvent) => {
+    setPoliceStation(event.target.value);
+  };
+
+
   const handleCrimeLocationAddrTextChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setCrimeLocationAddr(event.target.value);
   };
 
-  const handleMainStepBack = () => {
-    navigate("/step1");
-  };
-
   const handleNext = () => {
+    if (!GNDivision || !latitude || !longitude || !division || !policeStation || !crimeLocationAddr) {
+      return toast.warning("කරුණාකර සියලු අනුමත දත්ත පුරවන්න.", {
+        className: "toast-failed",
+        bodyClassName: "toast-failed",
+      });
+    }
     updateFormData("form2", {
       GNDivision,
       latitude,
       longitude,
+      division,
+      policeStation,
       crimeLocationAddr,
     });
+    console.log("🚀 ~ handleNext ~ updateFormData:", updateFormData);
     updateFormData("currentStep", 2);
     navigate("/step3");
   };
+  
   const handleBack = () => {
     updateFormData("form2", {
       GNDivision,
       latitude,
       longitude,
+      division,
+      policeStation,
       crimeLocationAddr,
     });
     updateFormData("currentStep", 0);
     navigate("/step1");
   };
 
+  const handleSave = async () => {
+    const httpService = new HTTPService({ baseURL: "http://localhost:3001" });
+    const newFormData = {...formData,form2: {  
+      GNDivision,
+      latitude,
+      longitude,
+      division,
+      policeStation,
+      crimeLocationAddr
+     }};
+    httpService.post("/submit-form",  {newFormData} ).then((result)=>{
+      toast.success((result.data as { msg: string; success: boolean }).msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }).catch((error)=>{
+      console.error(error);
+    });
+  };
+
+
   return (
     <BaseBox>
       <div className="p-5 flex flex-col grow">
+        <ToastContainer />
         <span className="text-xl font-bold">
           2. අපරාධ ස්ථානයේ නිලධාරී වසම සහ ලිපිනය
         </span>
@@ -74,6 +123,7 @@ export function Step2() {
               <div className="mt-3">
                 <span className="font-semibold">ග්‍රාම නිලධාරී වසම</span>
                 <SelectInput
+                  className="w-[330px] block my-3"
                   value={GNDivision}
                   onChange={handleGNDivisionSelectChange}
                   items={[
@@ -110,6 +160,46 @@ export function Step2() {
                 </div>
               </div>
 
+              <div className="flex gap-2 justify-between rounded-md grow">
+                <div className="my-3">
+                  <span className="font-semibold">පොලිස් වසම</span>
+                  <SelectInput
+                    className="w-[330px] block my-3"
+                    value={division}
+                    onChange={handleDivisionSelectChange}
+                    items={[
+                      "උතුරු කොළඹ","මැද කොළඹ","කොළඹ දකුණ","නුගේගොඩ","කැලණිය","ගම්පහ","මීගමුව","ගල්කිස්ස","පානදුර","කළුතර","මහනුවර","ගම්පොල","තේල්දෙණිය", "මාතලේ", "නුවරඑළිය", 
+                      "හැටන්", "මාතර", "ගාල්ල", "ඇල්පිටිය", "තංගල්ල", "කන්කසන්තුරේ", "යාපනය", "වව්නියාව", "කිලිනොච්චි", "මන්නාරම", "මුලතිව්", "මඩකලපුව", "අම්පාර","ත්‍රිකුණාමලය", "කන්තලේ", "කුරුනෑගල", 
+                      "කුලියපිටිය", "නිකවැරටිය", "පුත්තලම", "හලාවත", "අනුරාධපුර", "පොලොන්නරුව", "බදුල්ල", "බන්ඩාරවෙල", "මොනරාගල", "රත්නපුර", "ඇඹිලිපිටිය","කැගල්ල", "සීතාවකපුර"
+                    ]}
+                  />
+                </div>
+                <div className="my-3">
+                  <span className="font-semibold">පොලිස් ස්ථානය</span>
+                  <SelectInput
+                    className="w-[330px] block my-3"
+                    value={policeStation}
+                    onChange={handlePoliceStationSelectChange}
+                    items={[
+                      "ගම්පහ",
+                      "මිනුවන්ගොඩ",
+                      "කිරිඳිවැල",
+                      "පූගොඩ",
+                      "දොම්පේ",
+                      "නිට්ටඹුව",
+                      "ගනේමුල්ල",
+                      "වීරගුල",
+                      "වැලිවේරිය",
+                      "මල්වතුහිරිපිටිය",
+                      "වේයන්ගොඩ",
+                      "මීරිගම",
+                      "පල්ලෙවෙල",
+                      "යක්කල",
+                    ]}
+                  />
+                </div>
+              </div>
+
               <div className="my-3">
                 <span className="font-semibold">අපරාධ ස්ථානයේ ලිපිනය</span>
                 <TextInput
@@ -122,7 +212,7 @@ export function Step2() {
             </div>
 
             <div className="flex gap-2">
-              <div className="flex gap-2 justify-between rounded-md grow">
+              <div className="flex gap-2 place-content-evenly rounded-md grow">
                 <Button
                   variant="outlined"
                   startIcon={<ArrowBackIcon />}
@@ -134,6 +224,7 @@ export function Step2() {
                   variant="contained"
                   buttonColor="error"
                   text="යළි සැකසුමට"
+                  onClick={handleSave}
                 />
                 <Button
                   variant="outlined"

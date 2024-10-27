@@ -5,9 +5,14 @@ import { Button, SelectInput, TextInput } from "../../components";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
+import { useFormContext } from "../../hooks/formHook";
+import { HTTPService } from "../../services";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function Step5() {
   const navigate = useNavigate();
+  const { updateFormData, formData } = useFormContext();
   const stepCount = 3;
   const [activeStep, setActiveStep] = useState(0);
   const [numOfCriminals, setnumOfCriminals] = useState("");
@@ -23,6 +28,22 @@ export function Step5() {
   
 
   const handleNext = () => {
+    if (activeStep === 0 ){
+      if (!numOfCriminals || !criminalArrivedManner || !arrivedMethod  ) {
+        return toast.warning("කරුණාකර සියලු අනුමත දත්ත පුරවන්න.", {
+            className: "toast-failed",
+            bodyClassName: "toast-failed",
+        });
+      }
+    }else if (activeStep === 1 ){
+      if ( !weponsType || !weponsSubType || !weponNumber || !otherInfoStep502 ) {
+        return toast.warning("කරුණාකර සියලු අනුමත දත්ත පුරවන්න.", {
+            className: "toast-failed",
+            bodyClassName: "toast-failed",
+        });
+      }
+    }
+
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -31,10 +52,44 @@ export function Step5() {
   };
 
   const handleMainStepBack = () => {
+    updateFormData("form5", {
+      numOfCriminals,
+      criminalArrivedManner,
+      arrivedMethod,
+      weponsType,
+      weponsSubType,
+      weponNumber,
+      otherInfoStep502,
+      criminalProcedureType,
+      executionAndEscapeType,
+      otherInfoStep503
+    });
+    updateFormData("currentStep", 3);
     navigate('/step4');
   };
 
   const handleMainStepNext = () => {
+    if (activeStep === 2 ){
+      if (!criminalProcedureType || !executionAndEscapeType || !otherInfoStep503 ) {
+        return toast.warning("කරුණාකර සියලු අනුමත දත්ත පුරවන්න.", {
+            className: "toast-failed",
+            bodyClassName: "toast-failed",
+        });
+      }
+    }
+    updateFormData("form5", {
+      numOfCriminals,
+      criminalArrivedManner,
+      arrivedMethod,
+      weponsType,
+      weponsSubType,
+      weponNumber,
+      otherInfoStep502,
+      criminalProcedureType,
+      executionAndEscapeType,
+      otherInfoStep503
+    });
+    updateFormData("currentStep", 5);
     navigate('/step6');
   };
 
@@ -78,10 +133,41 @@ export function Step5() {
     setOtherInfoStep503(event.target.value);
   };
 
+    
+
+    const handleSave = async () => {
+      const httpService = new HTTPService({ baseURL: "http://localhost:3001" });
+      const newFormData={...formData,form5:{  numOfCriminals,
+        criminalArrivedManner,
+        arrivedMethod,
+        weponsType,
+        weponsSubType,
+        weponNumber,
+        otherInfoStep502,
+        criminalProcedureType,
+        executionAndEscapeType,
+        otherInfoStep503 }};
+        httpService.post("/submit-form",  {newFormData} ).then((result)=>{
+          toast.success((result.data as { msg: string; success: boolean }).msg, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          console.log(result)
+        }).catch((error)=>{
+          console.error(error);
+        });
+    };
+
 
   return (
     <BaseBox>
       <div className="p-5 flex flex-col grow">
+        <ToastContainer/>
         <span className="text-xl font-bold">5. අපරාධය සඳහා භාවිත ක්‍රම විධි</span>
         <div className="flex gap-2 justify-between rounded-md grow mt-5">
           <div className="p-2 grow flex flex-col justify-between">
@@ -106,7 +192,7 @@ export function Step5() {
               <div>
                 <React.Fragment>
                   <Typography sx={{ mt: 2, mb: 1 }}>
-                    {activeStep == 0 && (
+                    {activeStep === 0 && (
                       <div>
                           <span className="text-xl font-bold mt-2">අපරාධය සඳහා භාවිත ක්‍රම විධි</span>
                           <div className="mx-3">
@@ -122,6 +208,7 @@ export function Step5() {
                               <div className="mt-6 mb-3">
                                 <span className="font-semibold">අපරාධකරු පැමිණි විලාශය</span>
                                 <SelectInput
+                                  className="w-[330px] block my-3"
                                   value={criminalArrivedManner}
                                   onChange={handleCriminalArrivedMannerSelectChange}
                                   items={["පැමිණි විලාශය"]}
@@ -132,6 +219,7 @@ export function Step5() {
                             <div className="my-3">
                               <span className="font-semibold">ආගමන ක්‍රමය</span>
                               <SelectInput
+                                className="w-[330px] block my-3"
                                 value={arrivedMethod}
                                 onChange={handleArrivedMethodSelectChange}
                                 items={["ආගමන ක්‍රමය"]}
@@ -141,7 +229,7 @@ export function Step5() {
                       </div>
                     )}
 
-                    {activeStep == 1 && (
+                    {activeStep === 1 && (
                       <div>
                           <span className="text-xl font-bold mt-2">අපරාධය සඳහා භාවිත ක්‍රම විධි</span>
                           <div className="mx-3">
@@ -149,17 +237,19 @@ export function Step5() {
                               <div className="mt-6 ">
                                 <span className="font-semibold">අවි ආයුධ හා උපකරණ ප්‍රධාන වර්ගීකරණය</span>
                                 <SelectInput
+                                  className="w-[330px] block my-3"
                                   value={weponsType}
                                   onChange={handleWeponsTypeSelectChange}
-                                  items={["පැමිණි විලාශය"]}
+                                  items={["අවි ආයුධ හා උපකරණ ප්‍රධාන වර්ගීකරණය"]}
                                 />
                               </div>
                               <div className="mt-6">
                                 <span className="font-semibold">අවි ආයුධ හා උපකරණ අනු වර්ගීකරණය</span>
                                 <SelectInput
+                                  className="w-[330px] block my-3"
                                   value={weponsSubType}
                                   onChange={handleWeponsSubTypeSelectChange}
-                                  items={["පැමිණි විලාශය"]}
+                                  items={["අවි ආයුධ හා උපකරණ අනු වර්ගීකරණය"]}
                                 />
                               </div>
                             </div>
@@ -170,6 +260,7 @@ export function Step5() {
                                   value={weponNumber}
                                   onChange={handleWeponNumberTextChange}
                                   type="text"
+                                  placeholder="අවි ආයුධ අංකය"
                                 />
                             </div>
 
@@ -187,24 +278,26 @@ export function Step5() {
                       </div>
                     )}
 
-                    {activeStep == 2 && (
+                    {activeStep === 2 && (
                       <div>
                           <span className="text-xl font-bold mt-2">අපරාධය සිදුකර ඇති ක්‍රමය</span>
                           <div className="mx-3">
                             <div className="mt-6">
                               <span className="font-semibold"> අපරාධ ක්‍රම විධි වර්ග</span>
                               <SelectInput
+                              className="w-[330px] block my-3"
                               value={criminalProcedureType}
                               onChange={handleCriminalProcedureTypeSelectChange}
-                              items={["ආගමන ක්‍රමය"]}
+                              items={["ක්‍රම විධි වර්ග"]}
                               />
                             </div>
                             <div className="mt-3">
                               <span className="font-semibold">අපරාධය සිදුකර පලා ගිය ආකාරය</span>
                               <SelectInput
+                                className="w-[330px] block my-3"
                                 value={executionAndEscapeType}
                                 onChange={handleExecutionAndEscapeTypeSelectChange}
-                                items={["පැමිණි විලාශය"]}
+                                items={["පලා ගිය ආකාරය"]}
                               />
                             </div>
 
@@ -229,7 +322,7 @@ export function Step5() {
             </Box>
 
             <div className="flex gap-2">
-              <div className="flex gap-2 justify-between rounded-md grow">
+              <div className="flex gap-2 place-content-evenly rounded-md grow">
                 <Button
                   variant="outlined"
                   startIcon={<ArrowBackIcon />}
@@ -241,6 +334,7 @@ export function Step5() {
                   variant='contained'
                   buttonColor="error"
                   text="යළි සැකසුමට"
+                  onClick={handleSave}
                 />
                 <Button
                   variant="outlined"

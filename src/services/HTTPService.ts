@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { toast } from "react-toastify";
 
 interface Config {
   baseURL: string;
@@ -43,6 +44,7 @@ class HTTPService {
           timeout: this.timeout,
         }
       );
+      
       return { data: response.data, status: response.status };
     } catch (error) {
       throw this.handleError(error);
@@ -55,6 +57,7 @@ class HTTPService {
         `Server error: ${error.response.data.message || error.message}`
       );
     } else if (error.request) {
+      console.error(error.request);
       return new Error("Network error, please try again later.");
     } else {
       return new Error(`Error: ${error.message}`);

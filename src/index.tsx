@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <FormProvider>
-      <BrowserRouter basename="/dashboard">
+      <BrowserRouter basename="/crimeEntryForm">
         <App />
       </BrowserRouter>
     </FormProvider>
