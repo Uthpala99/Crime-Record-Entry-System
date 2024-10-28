@@ -115,6 +115,12 @@ export function Step3() {
   };
 
   const handleReset = () => {
+    setCrimeDate("");
+    setCrimeTime("");
+    setCrimeStartedDate("");
+    setCrimeStartedTime("");  
+    setCrimeEndedDate("");
+    setCrimeEndedTime("");
   };
 
   return (

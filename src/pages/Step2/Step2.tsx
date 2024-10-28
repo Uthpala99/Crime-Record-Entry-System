@@ -110,6 +110,12 @@ export function Step2() {
   };
 
   const handleReset = () => {
+    setGNDivision("");
+    setLatitude("");
+    setLongitude("");
+    setDivision("");
+    setPoliceStation("");
+    setCrimeLocationAddr("");
   };
 
   return (

@@ -89,10 +89,10 @@ export function Step9() {
 
   const handleReset = () => {
   };
-  
+
   return (
     <BaseBox>
-      <div className="p-4 flex flex-col grow">
+      <div className="p-6 flex flex-col grow">
         <ToastContainer/>
         <div className="flex justify-between">
         <span className="text-xl font-bold">9. අපරාධකරු වින්දිතයාට ඇති සබඳතාවය</span>

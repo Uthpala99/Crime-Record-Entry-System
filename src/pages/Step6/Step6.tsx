@@ -134,11 +134,21 @@ export function Step6() {
   };
 
   const handleReset = () => {
+    if (activeStep === 0 ){
+      setVictimName("");
+      setDamageDone("");
+      setOtherInfoStep601("");
+    }else if (activeStep === 1 ){
+      setPropertyType("");
+      setPropertySubType("");
+      setPropertyValue("");
+      setOtherInfoStep602("");
+    }
   };
 
   return (
     <BaseBox>
-      <div className="p-5 flex flex-col grow">
+      <div className="p-6 flex flex-col grow">
         <ToastContainer />
         <div className="flex justify-between">
         <span className="text-xl font-bold">6. අපරාධ ගොදුරු පුද්ගල ශාරීරික හානි වර්ග හා දේපළ හානි වර්ග හා වටිනාකම්</span>

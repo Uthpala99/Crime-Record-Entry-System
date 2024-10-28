@@ -34,16 +34,16 @@ export function Step1() {
     navigate("/step2");
   };
 
-  const handleViewValues = () => {
-    if (!typeOfChildAbuse || !subTypeOfChildAbuse)
-      return toast.warning("Please fill in all fields.", {
-        className: "toast-failed",
-        bodyClassName: "toast-failed",
-      });
-    updateFormData("form1", { typeOfChildAbuse, subTypeOfChildAbuse });
-    updateFormData("currentStep", 1);
-    navigate("/step2");
-  };
+  // const handleViewValues = () => {
+  //   if (!typeOfChildAbuse || !subTypeOfChildAbuse)
+  //     return toast.warning("Please fill in all fields.", {
+  //       className: "toast-failed",
+  //       bodyClassName: "toast-failed",
+  //     });
+  //   updateFormData("form1", { typeOfChildAbuse, subTypeOfChildAbuse });
+  //   updateFormData("currentStep", 1);
+  //   navigate("/step2");
+  // };
 
   const handleSave = async () => {
     const httpService = new HTTPService({ baseURL: "http://localhost:3001" });
@@ -82,10 +82,10 @@ export function Step1() {
 
   return (
     <BaseBox>
-      <div className="p-5 flex flex-col grow">
+      <div className="p-6 flex flex-col grow">
         <ToastContainer />
         <div className="flex justify-between">
-          <span className="text-xl font-bold"> 1. බාල අපරාධය සහ බාල අපරාධ වර්ගය</span>
+          <span className="text-xl font-bold"> 1. අපරාධය සහ අපරාධ වර්ගය</span>
           <div className="place-items-center ">
             <Button variant="outlined" text="තාවකලිකව සුරකින්න" onClick={handleSave} />
           </div>
@@ -95,23 +95,27 @@ export function Step1() {
           <div className="p-2 grow flex flex-col justify-between">
             <div>
               <div className="mt-6 mb-3">
-                <span className="font-semibold">වාර්තා වූ බාල අපරාධය</span>
+                <span className="font-semibold">වාර්තා වූ අපරාධය</span>
                 <SelectInput
                   className="w-[330px] block my-3"
                   value={typeOfChildAbuse}
                   onChange={handleChildAbuseSelectChange}
-                  items={["බාල අපරාධය"]}
+                  items={["ඝාතනය" , "දූෂණය" , "සොරකම" ,  "නිවාස කඩාවැටීම"]}
                 />
               </div>
               <div className="my-3">
                 <span className="font-semibold">
-                  බාල අපරාධයට අදාල වූ අනූ අපරාධ වර්ගය
+                  අපරාධයට අදාල වූ අනූ අපරාධ වර්ගය
                 </span>
                 <SelectInput
                   className="w-[330px] block my-3"
                   value={subTypeOfChildAbuse}
                   onChange={handleChildAbuseSubTypeSelectChange}
-                  items={["අනූ අපරාධ වරගය"]}
+                  items={["අනුමත මිනීමැරුම" , "ප්‍රායෝගික ඝාතනය / ආත්මහත්යාගේ උදව් (IPC 300, 301, 299)" , "දූෂණය - නීතිගතව (අවුරුදු 16ට පහළ ගැහැණු දරුවන්) [(P.D.C. 364(1), 364(2), 364(3), 364(a)]" , 
+                    "දූෂණය - (අවුරුදු 16 ඉක්මවූ) [(I.D.S. 364(1), 364(2), 364(a)]", "අනුමත මිනීමැරුම (IPC 296, 297)" , "භයානක අවි වලින් තුවාල කිරීම (පිහිනි ආදී)" , 
+                  "අසාමාන්‍ය අපරාධ සහ බරපතළ ලිංගික පීඩනය (I.D.S. 365, 365(a), 365(b)" , "හෙරොයින්, කොකේන්, කිසිම ප්‍රමාණයක මොර්ෆින්, මේතාම්පැටමින් හෝ අයිස් නිෂ්පාදනය" , 
+                  "ස්වයංක්‍රීය ගිනි අවියක හෝ නැවත විමෝචනය කළ හැකි ගිනි අවියක හිමිකිරීම" , "නිවාස කඩාවැටීම (440 - 446 ක්‍රි.ව.)" , "සොරකම (I.D.N.S. 380, 385)" , 
+                  "ගිනිතබාගැනීම් හෝ පුපුරන ද්‍රව්‍යවලින් හානි සිදුකිරීම (IPC 418, 419, 421)" , "රු. 50,000 කට වැඩි වටිනාකමක සොරකම (IPC 367, 368(a), 368(b), 369, 370, 394, 396)" ]}
                 />
               </div>
             </div>

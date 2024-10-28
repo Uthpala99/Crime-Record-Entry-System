@@ -134,6 +134,20 @@ export function Step5() {
   };
 
   const handleReset = () => {
+    if (activeStep === 0 ){
+      setnumOfCriminals("");
+      setCriminalArrivedManner("");
+      setArrivedMethod("");
+    }else if (activeStep === 1 ){
+      setWeponsType("");
+      setWeponsSubType("");
+      setWeponNumber("");
+      setOtherInfoStep502("");
+    }else if (activeStep === 2 ){
+      setCriminalProcedureType("");
+      setExecutionAndEscapeType("");
+      setOtherInfoStep503("");
+    }
   };
 
     const handleSave = async () => {

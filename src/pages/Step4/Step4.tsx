@@ -80,6 +80,9 @@ export function Step4() {
   };
 
   const handleReset = () => {
+    setTypeOfCrimeScene("");
+    setCrimeScene("");
+    setOtherInfoStep4("");
   };
   return (
     <BaseBox>
